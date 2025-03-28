@@ -6,13 +6,13 @@ import {
 } from "reactstrap";
 
 const data = [
-    { id: 1, nombre: "Jorge Carranza", edad: "15", empresa: "Tec", correo: "test@gmail.com" },
-    { id: 2, nombre: "Ramon Velez", edad: "15",empresa: "Banorte", correo: "test@gmail.com" },
-    { id: 3, nombre: "Hugo Sanchez ", edad: "15",empresa: "Real Madrid", correo: "test@gmail.com" },
-    { id: 4, nombre: "Rafael Marquez", edad: "15",empresa: "Barcelona", correo: "test@gmail.com" },
-    { id: 5, nombre: "Sergio Perez", edad: "15",empresa: "Oracle Red Bull Racing", correo: "test@gmail.com"},
-    { id: 6, nombre: "Max Verstapen", edad: "15",empresa: "Oracle Red Bull Racing", correo: "test@gmail.com" },
-    { id: 7, nombre: "Carlos Sainz", edad: "15",empresa: "Williams Racing", correo: "test@gmail.com" },
+    { id: 1, bookName: "Harry Potter", author: "J.K. Rowling", ISBN: "978-3-16-148410-0", realeaseDate: "1997-06-26", available: true },
+    { id: 2, bookName: "The Alchemist", author: "Paulo Coelho", ISBN: "978-0-06-112241-5", realeaseDate: "1988-05-01", available: true },
+    { id: 3, bookName: "Alice in Wonderland", author: "Lewis Carroll", ISBN: "978-0-19-283374-0", realeaseDate: "1865-11-26", available: true },
+    { id: 4, bookName: "To Kill a Mockingbird", author: "Harper Lee", ISBN: "978-0-06-112008-4", realeaseDate: "1960-07-11", available: true },
+    { id: 5, bookName: "Sapiens: A Brief History of Humankind", author: "Yuval Noah Harari", ISBN: "978-0-06-231609-7", realeaseDate: "2011-09-04", available: true },
+    { id: 6, bookName: "1984", author: "George Orwell", ISBN: "978-0-452-28423-4", realeaseDate: "1949-06-08", available: true },
+    { id: 7, bookName: "Pride and Prejudice", author: "Jane Austen", ISBN: "978-0-19-953556-2", realeaseDate: "1813-01-28", available: true },
 ];
 
 class Manager extends React.Component {
@@ -22,10 +22,11 @@ class Manager extends React.Component {
         modalInsertar: false,
         form: {
             id: "",
-            nombre: "",
-            edad: "",
-            empresa: "",
-            correo: "",
+            bookName: "",
+            author: "",
+            ISBN: "",
+            realeaseDate: "",
+            available: false,
         },
     };
 
@@ -55,10 +56,11 @@ class Manager extends React.Component {
         var arreglo = this.state.data;
         arreglo.map((registro) => {
             if (dato.id === registro.id) {
-                arreglo[contador].nombre = dato.nombre;
-                arreglo[contador].edad = dato.edad;
-                arreglo[contador].empresa = dato.empresa;
-                arreglo[contador].correo = dato.correo;
+                arreglo[contador].bookName = dato.bookName;
+                arreglo[contador].author = dato.author;
+                arreglo[contador].ISBN = dato.ISBN;
+                arreglo[contador].realeaseDate = dato.realeaseDate;
+                arreglo[contador].available = dato.available;
             }
             contador++;
         });
@@ -89,10 +91,11 @@ class Manager extends React.Component {
     };
 
     handleChange = (e) => {
+        const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
         this.setState({
             form: {
                 ...this.state.form,
-                [e.target.name]: e.target.value,
+                [e.target.name]: value,
             },
         });
     };
@@ -101,6 +104,7 @@ class Manager extends React.Component {
         return (
             <>
                 <Container>
+                    <h1>Library management system!!!!</h1>
                     <br />
                     <Button color="success" onClick={this.mostrarModalInsertar}>Crear</Button>
                     <br />
@@ -109,21 +113,25 @@ class Manager extends React.Component {
                         <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Edad</th>
-                            <th>Empresa</th>
-                            <th>Correo</th>
-                            <th>Acción</th>
+                            <th>Book name</th>
+                            <th>Author</th>
+                            <th>ISBN</th>
+                            <th>Realease date</th>
+                            <th>Available</th>
+                            <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
                         {this.state.data.map((dato) => (
                             <tr key={dato.id}>
                                 <td>{dato.id}</td>
-                                <td>{dato.nombre}</td>
-                                <td>{dato.edad}</td>
-                                <td>{dato.empresa}</td>
-                                <td>{dato.correo}</td>
+                                <td>{dato.bookName}</td>
+                                <td>{dato.author}</td>
+                                <td>{dato.ISBN}</td>
+                                <td>{dato.realeaseDate}</td>
+                                <td>{
+                                    dato.available ? "Available" : "Not Available"
+                                }</td>
                                 <td>
                                     <Button color="primary" onClick={() => this.mostrarModalActualizar(dato)}>Editar</Button>{" "}
                                     <Button color="danger" onClick={() => this.eliminar(dato)}>Eliminar</Button>
@@ -143,20 +151,32 @@ class Manager extends React.Component {
                             <input className="form-control" readOnly type="text" value={this.state.data.length+1} />
                         </FormGroup>
                         <FormGroup>
-                            <label>Nombre: </label>
-                            <input className="form-control" name="nombre" type="text" onChange={this.handleChange} />
+                            <label>Book name: </label>
+                            <input className="form-control" name="bookName" type="text" onChange={this.handleChange} />
                         </FormGroup>
                         <FormGroup>
-                            <label>Edad: </label>
-                            <input className="form-control" name="edad" type="text" onChange={this.handleChange} />
+                            <label>Author: </label>
+                            <input className="form-control" name="author" type="text" onChange={this.handleChange} />
                         </FormGroup>
                         <FormGroup>
-                            <label>Empresa: </label>
-                            <input className="form-control" name="empresa" type="text" onChange={this.handleChange} />
+                            <label>ISBN: </label>
+                            <input className="form-control" name="ISBN" type="text" onChange={this.handleChange} />
                         </FormGroup>
                         <FormGroup>
-                            <label>Correo electronico: </label>
-                            <input className="form-control" name="correo" type="text" onChange={this.handleChange} />
+                            <label>Realease date: </label>
+                            <input className="form-control" name="realeaseDate" type="text" onChange={this.handleChange} />
+                        </FormGroup>
+                        <FormGroup check className="mb-3">
+                            <label className="form-check-label">
+                                <input
+                                    className="form-check-input"
+                                    name="available"
+                                    type="checkbox"
+                                    onChange={this.handleChange}
+                                    checked={this.state.form.available || false}
+                                />{' '}
+                                Available
+                            </label>
                         </FormGroup>
                     </ModalBody>
                     <ModalFooter>
@@ -177,40 +197,50 @@ class Manager extends React.Component {
                             <label>Nombre:</label>
                             <input
                                 className="form-control"
-                                name="nombre"
+                                name="bookName"
                                 type="text"
                                 onChange={this.handleChange}
-                                value={this.state.form.nombre}
+                                value={this.state.form.bookName}
                             />
                         </FormGroup>
                         <FormGroup>
                             <label>Edad:</label>
                             <input
                                 className="form-control"
-                                name="edad"
+                                name="author"
                                 type="text"
                                 onChange={this.handleChange}
-                                value={this.state.form.edad}
+                                value={this.state.form.author}
                             />
                         </FormGroup>
                         <FormGroup>
                             <label>Empresa:</label>
                             <input
                                 className="form-control"
-                                name="empresa"
+                                name="ISBN"
                                 type="text"
                                 onChange={this.handleChange}
-                                value={this.state.form.empresa}
+                                value={this.state.form.ISBN}
                             />
                         </FormGroup>
                         <FormGroup>
                             <label>Correo electronico:</label>
                             <input
                                 className="form-control"
-                                name="correo"
+                                name="realeaseDate"
                                 type="text"
                                 onChange={this.handleChange}
-                                value={this.state.form.correo}
+                                value={this.state.form.realeaseDate}
+                            />
+                        </FormGroup>
+                        <FormGroup>
+                            <label>Available:</label>
+                            <input
+                                className="form-control"
+                                name="available"
+                                type="checkbox"
+                                onChange={this.handleChange}
+                                checked={this.state.form.available || false}
                             />
                         </FormGroup>
                     </ModalBody>
